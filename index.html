@@ -224,7 +224,7 @@ label
 </div>
 
 <label style="font-size: 22px; margin-left: 30px;">
-    设置创建时间
+    记录种子创建时间
     <input id="torrent_creation_date" type="checkbox" style="transform:scale(2); background: white; margin-left: 20px;" checked
         oninput="TorrentParamsChanged('creationdate')"></label>
 <br />
@@ -242,7 +242,7 @@ label
 
 <div style="position: relative;">
     <textarea id="torrent_trackers" class="input-fullwidth" style="height: 130px; margin-top: 20px; white-space: pre-wrap;"
-        placeholder="Trackers 网址, 以空格或换行符分隔 (可选)" oninput="TorrentParamsChanged('trackers')" onchange="FormatTextareLines(this, false)"></textarea>
+        placeholder="Trackers 网址, 以空格或换行符分隔 (可选)" oninput="TorrentParamsChanged('trackers')" onchange="FormatTextareLines(this, false)" value="http://open.acgnxtracker.com/announce"></textarea>
     <button id="tracker_add_button" style="position: absolute; right: 35px; top: 30px; visibility: hidden; opacity: 0; transition: opacity 0.5s ease-in-out;"
         onclick="ShowTrackers(true)">
         <!-- Add some trackers -->
