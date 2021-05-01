@@ -3,9 +3,9 @@
 
 <head>
 <meta charset="utf-8">
-<meta name="description" content="Create torrent files directly in your web browser.">
+<meta name="description" content="在浏览器中创建种子文件.">
 <meta name="keywords" content="torrent,torrent file">
-<title>Online Torrent Creator</title>
+<title>在线创建种子</title>
 
 <style>
 
@@ -174,30 +174,32 @@ label
 </a>
 <a id="download_link" style="display: none"></a>
 
-<div style="font-size: 32px; margin: 5px 0px 15px 20px;">Create torrent files online</div>
-<button style="width: 200px; margin: 5px 0px 5px 20px;" id="filechooserbutton" onclick="document.getElementById('filechooser').click()">Select file</button>
-<button style="width: 200px; margin: 5px 0px 5px 20px;" id="folderchooserbutton" onclick="document.getElementById('folderchooser').click()">Select folder</button>
+<div style="font-size: 32px; margin: 5px 0px 15px 20px;">在线创建种子</div>
+<button style="width: 200px; margin: 5px 0px 5px 20px;" id="filechooserbutton" onclick="document.getElementById('filechooser').click()">选择文件</button>
+<button style="width: 200px; margin: 5px 0px 5px 20px;" id="folderchooserbutton" onclick="document.getElementById('folderchooser').click()">选择文件夹</button>
 <div id="selected_file_info" style="display: inline; font-size: 22px; margin-left: 30px;"></div>
 <br />
 <input type="file" style="display: none" id="filechooser" onclick="this.value=null" onchange="FileSelected(this.files)">
 <input type="file" style="display: none" id="folderchooser" webkitdirectory onclick="this.value=null" onchange="FolderSelected(this.files)">
 
 <div id="no_folder_warning" style="display: none; margin: 20px; color: #ff3d58; font-size: 20px;">
-    Your browser does not support folder selection, so you can only create torrent files from single files. You can check which browsers support folder selection
+    因为你的浏览器不支持选择文件夹，所以你只能选择一个文件创建种子。你可以查看哪些浏览器支持选择文件夹
+    <!-- Your browser does not support folder selection, so you can only create torrent files from single files. You can check which browsers support folder selection -->
     <a href="https://caniuse.com/#feat=input-file-directory">here.</a>&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="javascript:void(0)" onclick="document.getElementById('no_folder_warning').style.display='none'">(hide warning)</a>
 </div>
 <div id="no_wasm_warning" style="display: none; margin-left: 20px; color: #ff3d58; font-size: 20px;">
-    Warning: your browser does not support webassembly. It can take a loooong time to read large files. You can check which browsers support webassembly
+    警告: 你的浏览器不支持 webassembly。读取大文件可能需要很长时间。你可以查看哪些浏览器支持 webassembly。
+    <!-- Warning: your browser does not support webassembly. It can take a loooong time to read large files. You can check which browsers support webassembly -->
     <a href="https://caniuse.com/#feat=wasm">here.</a>&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="javascript:void(0)" onclick="document.getElementById('no_wasm_warning').style.display='none'">(hide warning)</a>
 </div>
 
-<input type="text" id="torrent_name" class="input-fullwidth" style="margin: 20px;" placeholder="Torrent name" oninput="TorrentParamsChanged('name')">
+<input type="text" id="torrent_name" class="input-fullwidth" style="margin: 20px;" placeholder="种子名称" oninput="TorrentParamsChanged('name')">
 <br />
 
 <div style="display: flex; flex-wrap: wrap;">
-    <label style="display: inline; margin-left: 30px; font-size: 22px; border-right: 100px solid transparent;">Piece size:
+    <label style="display: inline; margin-left: 30px; font-size: 22px; border-right: 100px solid transparent;">区块大小:
     <select id="torrent_block_size" style="width: 200px; margin-left: 20px; margin-bottom: 20px;" oninput="TorrentParamsChanged('blocksize')">
         <option value="0">Automatic</option>
         <option value="16384">16 kB</option>
@@ -208,52 +210,54 @@ label
         <option value="524288">512 kB</option>
         <option value="1048576">1 MB</option>
         <option value="2097152">2 MB</option>
-        <option value="4194304">4 MB</option>
+        <option value="4194304" selected>4 MB</option>
         <option value="8388608">8 MB</option>
         <option value="16777216">16 MB</option>
     </select>
     </label>
 
     <label style="font-size: 22px; margin-left: 30px; margin-bottom: 20px;" oninput="TorrentParamsChanged('private')">
-        Private torrent
-        <input id="torrent_is_private" type="checkbox" style="transform:scale(2); background: white; margin-left: 20px;">
+        <!-- Private torrent -->
+        私有种子
+        <input id="torrent_is_private" type="checkbox" checked="checked" style="transform:scale(2); background: white; margin-left: 20px;">
     </label>
 </div>
 
 <label style="font-size: 22px; margin-left: 30px;">
-    Set creation date
+    设置创建时间
     <input id="torrent_creation_date" type="checkbox" style="transform:scale(2); background: white; margin-left: 20px;" checked
         oninput="TorrentParamsChanged('creationdate')"></label>
 <br />
 
 <div id="trackers_list_overlay">
     <div id="trackers_list">
-        <button style="position: absolute; margin: 10px 0px 0px 10px;" onclick="ShowTrackers(false)">Close</button>
-        <div style="left: 50%; font-size: 24px; text-align: center; margin-top: 10px; margin-bottom: 50px;">Click on a tracker to add it to the list!</div>
+        <button style="position: absolute; margin: 10px 0px 0px 10px;" onclick="ShowTrackers(false)">关闭</button>
+        <div style="left: 50%; font-size: 24px; text-align: center; margin-top: 10px; margin-bottom: 50px;">点击 tracker 添加到列表中!</div>
         <div id="tracker_button_container"></div>
-        <div style="margin: 30px 0px 5px 5px; font-size: 20px;">Tracker list from
-            <a href="https://github.com/ngosang/trackerslist/">https://github.com/ngosang/trackerslist/</a>
+        <div style="margin: 30px 0px 5px 5px; font-size: 20px;">Tracker 列表从
+            <a href="https://github.com/ngosang/trackerslist/">https://github.com/ngosang/trackerslist/</a> 获取
         </div>
     </div>
 </div>
 
 <div style="position: relative;">
     <textarea id="torrent_trackers" class="input-fullwidth" style="height: 130px; margin-top: 20px; white-space: pre-wrap;"
-        placeholder="Trackers, separated by space or newline (optional)" oninput="TorrentParamsChanged('trackers')" onchange="FormatTextareLines(this, false)"></textarea>
+        placeholder="Trackers 网址, 以空格或换行符分隔 (可选)" oninput="TorrentParamsChanged('trackers')" onchange="FormatTextareLines(this, false)"></textarea>
     <button id="tracker_add_button" style="position: absolute; right: 35px; top: 30px; visibility: hidden; opacity: 0; transition: opacity 0.5s ease-in-out;"
         onclick="ShowTrackers(true)">
-        Add some trackers
+        <!-- Add some trackers -->
+        添加 Trackers
     </button>
 </div>
 <br />
 <textarea type="text" id="torrent_webseeds" class="input-fullwidth" style="margin-top: 0px; overflow: hidden;"
-    placeholder="Web seeds, separated by space or newline (optional)" oninput="ResizeTextarea(this);TorrentParamsChanged('url-list')"
+    placeholder="网络种子网址, 以空格或换行符分隔 (可选)" oninput="ResizeTextarea(this);TorrentParamsChanged('url-list')"
     onchange="FormatTextareLines(this)"></textarea>
 <br />
 <textarea type="text" id="torrent_comment" class="input-fullwidth" style="margin-top: 0px; overflow: hidden;"
-    placeholder="Comment (optional)" oninput="ResizeTextarea(this);TorrentParamsChanged('comment')"></textarea>
+    placeholder="评论 (可选)" oninput="ResizeTextarea(this);TorrentParamsChanged('comment')"></textarea>
 <br />
-<input type="text" id="torrent_source" class="input-fullwidth" style="margin-bottom: 20px;" placeholder="Source (optional)"
+<input type="text" id="torrent_source" class="input-fullwidth" style="margin-bottom: 20px;" placeholder="来源 (可选)"
     oninput="TorrentParamsChanged('source')">
 <br />
 
@@ -271,7 +275,7 @@ label
 </div>
 
 <button id="create_torrent_button" style="display: grid; margin: 20px 0px 0px 20px; width: calc(100% - 46px); max-width: 600px; height: 100px; font-size: 50px; line-height: 80px;"
-    onclick="CreateTorrent()" disabled>Create torrent</button>
+    onclick="CreateTorrent()" disabled>创建种子</button>
 </div>
 
 <script src="dist/index.js"></script>
